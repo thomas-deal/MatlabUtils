@@ -12,6 +12,7 @@ function phiq = Interp1Bearing(t,phi,tq)
 % Outputs:
 %       phiq    - Interpolated bearing, deg
 %
+
 %% Convert to x/y
 x = cosd(phi);
 y = sind(phi);
