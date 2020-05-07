@@ -19,7 +19,8 @@ function [t, f, S, ENBW] = ComputeSpectrogram(Fs,s,varargin)
 %       NFFT        - FFT size <Fs>
 %       FrameSize   - Number of samples per frame <Fs>
 %       Overlap     - Percent overlap of adjacent frames [0,1) <0.5>
-%       Window      - User-defined window vector of length FrameSize
+%       Window      - User-defined window vector of length FrameSize or
+%                     function handle to valid window function generator
 %                     <@hann(FrameSize,'periodic')>
 %       Type        - 'LS', 'LSD', 'PS', 'PSD' <'LS'>
 %
@@ -47,8 +48,8 @@ checkFrameSize = @(x) isnumeric(x) && isscalar(x) && (x > 0);
 defaultOverlap = 0.5;
 checkOverlap = @(x) isnumeric(x) && isscalar(x) && (x >= 0) && (x < 1);
 % Window
-defaultWindow = [];
-checkWindow = @(x) isnumeric(x);
+defaultWindow = @hann;
+checkWindow = @(x) isnumeric(x) || isa(x,'function_handle');
 % Type
 defaultType = 'LS';
 validTypes = {'LS','LSD','PS','PSD'};
@@ -68,10 +69,6 @@ FrameSize = par.Results.FrameSize;
 Overlap = par.Results.Overlap;
 Window = par.Results.Window;
 Type = par.Results.Type;
-if ~isempty(Window)&&length(Window)~=FrameSize
-    disp('User-defined window must be of length FrameSize. Using default Hanning window instead.');
-    Window = [];
-end
 %% Sampling 
 dt = FrameSize/Fs;
 N = length(s);
@@ -81,10 +78,17 @@ df = Fs/NFFT;
 f = (0:NFFT/2-1)'*df;
 Noverlap = round(FrameSize*(1-Overlap));
 %% Window Function
-if isempty(Window)
-    win = window(@hann,FrameSize,'periodic');
+Nwin = min(NFFT,FrameSize);
+win = zeros(FrameSize,1);
+if isa(Window,'function_handle')
+    tmp = window(Window,Nwin+1);
+    win(1:Nwin) = tmp(1:Nwin);
 else
-    win = Window;
+    if isempty(Window)
+        win(1:Nwin) = window(@hann,Nwin,'periodic');
+    else
+        win(1:Nwin) = Window(1:Nwin);
+    end
 end
 S1 = sum(win);
 S2 = sum(win.^2);
