@@ -44,19 +44,19 @@ zaxis = par.Results.zaxis;
 c0 = par.Results.c0;
 %% Initialize
 z = 0;
-[c,cdot,cdot2] = munk(0,'zaxis',zaxis,'c0',c0);
+[c,cdot,cdot2] = Munk(0,'zaxis',zaxis,'c0',c0);
 dzfact = dz0*cdot2;
 zi = dzfact/cdot2;
 %% Sample
 while zi<zmax
-    [ci,cdoti,cdot2i] = munk(zi,'zaxis',zaxis,'c0',c0);
+    [ci,cdoti,cdot2i] = Munk(zi,'zaxis',zaxis,'c0',c0);
     z = [z; zi]; %#ok<*AGROW>
     c = [c; ci];
     cdot = [cdot; cdoti];
     cdot2 = [cdot2; cdot2i];
     zi = zi + dzfact/cdot2i;
 end
-[ci,cdoti,cdot2i] = munk(zmax,'zaxis',zaxis,'c0',c0);
+[ci,cdoti,cdot2i] = Munk(zmax,'zaxis',zaxis,'c0',c0);
 z = [z; zmax];
 c = [c; ci];
 cdot = [cdot; cdoti];

@@ -1,17 +1,18 @@
-function avgtheta = BearingAverage(theta,varargin)
-% function avgtheta = BearingAverage(theta)
-% function avgtheta = BearingAverage(theta,avgdim)
+function [avgtheta, stdtheta] = BearingAverage(theta,varargin)
+% function [avgtheta, stdtheta] = BearingAverage(theta)
+% function [avgtheta, stdtheta] = BearingAverage(theta,avgdim)
 %
-% Computes the average of a set of bearings in degrees. Result is in the
-% range [0,360). For matrix inputs, the input avgdim selects the dimension
-% to average over. Ignores NaN values in theta.
+% Computes the average and standard deviation of a set of bearings in 
+% degrees. Result is in the range [0,360). For matrix inputs, the input 
+% avgdim selects the dimension to average over. Ignores NaN values.
 %
 % Inputs:
 %       theta       - Bearing, degrees
 %       avgdim      - Marix dimension to average over
 %
 % Outputs:
-%       avgtheta    - Average Bearing, degrees
+%       avgtheta    - Bearing mean, degrees
+%       stdtheta    - Bearing standard deviation, degrees
 %
 
 %% Check Input Arguments
@@ -31,3 +32,5 @@ y = sind(theta);
 x = mean(x,avgdim,'omitnan');
 y = mean(y,avgdim,'omitnan');
 avgtheta = mod(atan2d(y,x),360);
+%% Compute Standard Deviation
+stdtheta = std(wrap180(theta-avgtheta),0,avgdim,'omitnan');
