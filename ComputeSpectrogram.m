@@ -70,13 +70,14 @@ Overlap = par.Results.Overlap;
 Window = par.Results.Window;
 Type = par.Results.Type;
 %% Sampling 
+Noverlap = round(FrameSize*(1-Overlap));
+Overlap = 1-Noverlap/FrameSize;
 dt = FrameSize/Fs;
 N = length(s);
 t = dt/2:dt*(1-Overlap):(N/Fs-dt/2);
 Nfr = length(t);
 df = Fs/NFFT;
 f = (0:NFFT/2-1)'*df;
-Noverlap = round(FrameSize*(1-Overlap));
 %% Window Function
 Nwin = min(NFFT,FrameSize);
 win = zeros(FrameSize,1);
