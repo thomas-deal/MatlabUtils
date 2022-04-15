@@ -7,8 +7,8 @@ function R = RotationMatrix(varargin)
 % degrees about the y axis, and psi degrees about the z axis in a
 % right-handed coordinate frame. If gamma, theta, and psi are vectors of
 % the same length N, R is of dimension 3x3xN. Instead of passing gamma,
-% theta, and psi individually, they can bbe combined as rows in the 3xN
-% mareix Ori.
+% theta, and psi individually, they can be combined as rows in the 3xN
+% matrix Ori.
 %
 % Inputs:
 %           gamma   - Roll angle, deg
